@@ -1,8 +1,12 @@
 //db.js
 
 const mongoose = require('mongoose')
-
-mongoose.connect("Your MongoDB URI")
+mongoose.connect(
+    "mongodb+srv://trishnasharma2002:rGxtFHvFQduTsExp@cluster0.osdr39d.mongodb.net/JournalApp?retryWrites=true&w=majority",
+    {
+        tls: true,
+    }
+);
 
 const userSchema = new mongoose.Schema({
     Username: {

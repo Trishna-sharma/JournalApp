@@ -1,9 +1,7 @@
-//routes/post.js
-
-const jwt = require("jsonwebtoken")
-const express = require("express")
-const { Post, User } = require("../db")
-const { JWT_SECRET } = require("../config.js")
+const { JWT_SECRET } = require("../config.js");
+const jwt = require("jsonwebtoken");
+const express = require("express");
+const { Post, User } = require("../db");
 
 const PostRouter = express.Router();
 
@@ -22,12 +20,12 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-PostRouter.use('/*', authMiddleware)
-PostRouter.get('/bulk', async (req, res) => {
+// Apply middleware to all routes
+PostRouter.use(authMiddleware);
 
+PostRouter.get('/bulk', async (req, res) => {
     const blogs = await Post.find({}).populate('author', 'Username');
     return res.json({ blogs });
-
 });
 
 PostRouter.post('/post', async (req, res) => {
@@ -46,17 +44,16 @@ PostRouter.post('/post', async (req, res) => {
 });
 
 PostRouter.get('/uname', async (req, res) => {
-    const id = req.userId
-    const user = await User.findById(id)
-    return (res.json({ uname: user.Username }))
-})
+    const id = req.userId;
+    const user = await User.findById(id);
+    return res.json({ uname: user.Username });
+});
 
 PostRouter.get('/:id', async (req, res) => {
-
     const id = req.params.id;
-    const blog = await Post.findById(id).populate('author', 'Username')
+    const blog = await Post.findById(id).populate('author', 'Username');
 
-    return res.json(blog)
+    return res.json(blog);
 });
 
 module.exports = PostRouter;

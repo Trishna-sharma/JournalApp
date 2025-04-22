@@ -1,6 +1,6 @@
 ## Demo Project to showcase Journal Application
 
-## Link:
+## Link: https://journal-app-lilac-seven.vercel.app/
 
 ## Purpose
 

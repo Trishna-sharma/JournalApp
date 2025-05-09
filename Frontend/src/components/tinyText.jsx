@@ -64,7 +64,7 @@ export function Editortiny() {
             </div>
             <div className="p-6">
                 <Editor
-                    apiKey={process.env.REACT_APP_TINY_API_KEY}
+                    apiKey={process.env.TINY_MCE_TEXT}
                     onInit={(evt, editor) =>
                         (editorRef.current = editor)}
                     initialValue="<p>This is the initial content

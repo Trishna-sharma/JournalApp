@@ -64,7 +64,7 @@ export function Editortiny() {
             </div>
             <div className="p-6">
                 <Editor
-                    apiKey={process.env.TINY_MCE_TEXT}
+                    apiKey='4wkzc5j0925bq785jtnw5cqap16vwb7k95ze23j6afolazt7'
                     onInit={(evt, editor) =>
                         (editorRef.current = editor)}
                     initialValue="<p>This is the initial content

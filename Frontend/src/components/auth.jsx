@@ -24,11 +24,9 @@ export const Auth = ({ type }) => {
 
             navigate("/blogs");
         } catch (e) {
-        //     alert(
-        //         "Error, Try again| use a diffrent username | 
-        // make sure username is atleast 3 characters
-        //  long and password 8 characters "
-        //     );
+            alert(
+                "Error, Try again | use a diffrent username | make sure username is atleast 3 characterslong and password 8 characters "
+            );
         }
     }
     return (

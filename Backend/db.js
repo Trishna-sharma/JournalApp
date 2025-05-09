@@ -1,8 +1,7 @@
-//db.js
-
 const mongoose = require('mongoose')
+require("dotenv").config({ path: ".env.local" });
 mongoose.connect(
-    "mongodb+srv://trishnasharma2002:rGxtFHvFQduTsExp@cluster0.osdr39d.mongodb.net/JournalApp?retryWrites=true&w=majority",
+    process.env.MONGO_DB ,
     {
         tls: true,
     }

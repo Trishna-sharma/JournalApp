@@ -3,15 +3,13 @@ import { Editor } from "@tinymce/tinymce-react";
 import { BACKEND_URL } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import dot from "dotenv";
-dot.config({ path: ".env.local" });
+
 export function Editortiny() {
     const editorRef = useRef(null);
     const [title, stitle] = useState("");
 
     let ctemp = "";
     const navigate = useNavigate();
-
     async function sendRequest() {
         try {
             const lk = `${BACKEND_URL}/api/v1/blog/post`;
@@ -63,7 +61,7 @@ export function Editortiny() {
             </div>
             <div className="p-6">
                 <Editor
-                    apiKey={process.env.TINY_MCE_TEXT}
+                    apiKey="4wkzc5j0925bq785jtnw5cqap16vwb7k95ze23j6afolazt7"
                     onInit={(evt, editor) =>
                         (editorRef.current = editor)}
                     initialValue="<p>This is the initial content

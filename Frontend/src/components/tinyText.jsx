@@ -45,8 +45,11 @@ export function Editortiny() {
 
     return (
         <div>
-            <div className="flex justify-center w-full pt-8">
-                <div className="max-w-screen-lg w-full me-20">
+            <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+                <div className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6">
+                <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">
+                    Create a New Journal Entry
+                </h1>
                     <input
                         onChange={(e) => {
                             stitle(e.target.value);
@@ -57,9 +60,9 @@ export function Editortiny() {
                           block w-full p-2.5"
                         placeholder="Title"
                     />
-                </div>
-            </div>
-            <div className="p-6">
+                
+            
+            <div className="border border-gray-300 rounded-lg overflow-hidden">
                 <Editor
                     apiKey="4wkzc5j0925bq785jtnw5cqap16vwb7k95ze23j6afolazt7"
                     onInit={(evt, editor) =>
@@ -110,6 +113,8 @@ export function Editortiny() {
                         Submit
                     </button>
                 </div>
+            </div>
+            </div>
             </div>
         </div>
     );

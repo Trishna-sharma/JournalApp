@@ -1,10 +1,40 @@
 import { AppBar } from "./appBar";
 import { Avatar } from "./blogCard";
 import parse from "html-react-parser";
+import { useNavigate } from "react-router-dom";
 
 export const BlogPage = ({ blog }) => {
     const RederedC = parse(blog.content);
-    console.log(RederedC);
+    const navigate = useNavigate();
+
+    const handleDelete = async () => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch(`https://journal-app-backend-phi.vercel.app/api/v1/blog/${blog._id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`, // Add your token here
+                },
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert(`Failed to delete the post: ${errorData.message}`);
+                return;
+            }
+            if (response.ok) {
+                alert("Post deleted successfully!");
+                navigate("/blogs"); // Redirect to the blog list page
+            } else {
+                alert("Failed to delete the post.");
+            }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            alert("An error occurred while deleting the post.");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* AppBar */}
@@ -23,6 +53,12 @@ export const BlogPage = ({ blog }) => {
                     <div className="pt-6 text-gray-700 leading-relaxed text-base md:text-lg">
                         {RederedC}
                     </div>
+                    <button
+                        onClick={handleDelete}
+                        className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                    >
+                        Delete Post
+                    </button>
                 </div>
 
                 {/* Sidebar */}

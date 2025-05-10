@@ -1,4 +1,3 @@
-//config.js
 
 const JWT_SECRET = "Its Your Secret"
 

@@ -14,6 +14,7 @@ const authMiddleware = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         req.userId = decoded.userId;
+        console.log("Authenticated User ID:", req.userId); 
         next();
     } catch (err) {
         return res.status(403).json({});
@@ -55,5 +56,32 @@ PostRouter.get('/:id', async (req, res) => {
 
     return res.json(blog);
 });
+PostRouter.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        // Find the post by ID
+        const post = await Post.findById(id);
+
+        // Check if the post exists
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+        console.log("Post Author ID:", post.author.toString()); // Debugging
+        console.log("Authenticated User ID:", req.userId); // Debugging
+
+        // Check if the authenticated user is the author of the post
+        if (post.author.toString() !== req.userId) {
+            return res.status(403).json({ message: "You are not authorized to delete this post" });
+        }
+
+        // Delete the post
+        await Post.findByIdAndDelete(id);
+
+        return res.json({ message: "Post deleted successfully" });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "An error occurred while deleting the post" });
+    }
+})
 
 module.exports = PostRouter;

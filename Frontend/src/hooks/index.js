@@ -1,5 +1,3 @@
-//hooks/index.js
-
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../config";
 import axios from "axios";

@@ -1,5 +1,3 @@
-//components/BlogPage.jsx
-
 import { AppBar } from "./appBar"
 import { Avatar } from "./blogCard"
 import parse from 'html-react-parser'

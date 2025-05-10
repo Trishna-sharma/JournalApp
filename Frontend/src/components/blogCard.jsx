@@ -1,5 +1,3 @@
-//components/Blogcard.jsx
-
 import { Link } from "react-router-dom";
 
 export const Blogcard = ({ id, authorName, title, 

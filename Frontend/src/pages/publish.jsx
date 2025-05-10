@@ -1,5 +1,3 @@
-//pages/publish.jsx
-
 import { AppBar } from "../components/appBar"
 import { Editortiny } from "../components/tinyText"
 

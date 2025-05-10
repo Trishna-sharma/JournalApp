@@ -1,5 +1,3 @@
-//pages/Blog.jsx
-
 import { useParams } from "react-router-dom";
 import { useBlog } from "../hooks";
 import { BlogPage } from "../components/blogPage";

@@ -1,6 +1,3 @@
-//pages/signup.jsx
-
-
 import { Auth } from "../components/auth"
 import { Quote } from "../components/Quote"
 

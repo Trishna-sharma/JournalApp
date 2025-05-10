@@ -1,5 +1,3 @@
-// frontend/src/components/Appbar.jsx
-
 import { Link } from "react-router-dom"
 import { Avatar } from "./blogCard"
 

@@ -1,5 +1,3 @@
-//pages/Blogs.jsx
-
 import { AppBar } from "../components/appBar"
 import { Blogcard } from "../components/blogCard"
 import { useBlogs } from "../hooks";

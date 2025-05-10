@@ -1,11 +1,10 @@
-//components/tinytext.jsx
-
 import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { BACKEND_URL } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import dot from "dotenv";
+dot.config({ path: ".env.local" });
 export function Editortiny() {
     const editorRef = useRef(null);
     const [title, stitle] = useState("");

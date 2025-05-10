@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BACKEND_URL } from "../config";
+import { REACT_APP_BACKEND_URL } from "../config";
 import axios from "axios";
 
 export const useBlog = ({ id }) => {
@@ -8,7 +8,7 @@ export const useBlog = ({ id }) => {
 
     useEffect(() => {
         axios
-            .get(`${BACKEND_URL}/api/v1/blog/${id}`, {
+            .get(`${REACT_APP_BACKEND_URL}/api/v1/blog/${id}`, {
                 headers: {
                     Authorization: localStorage.getItem("token"),
                 },
@@ -31,7 +31,7 @@ export const useBlogs = () => {
 
     useEffect(() => {
         axios
-            .get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+            .get(`${REACT_APP_BACKEND_URL}/api/v1/blog/bulk`, {
                 headers: {
                     Authorization: localStorage.getItem("token"),
                 },
@@ -51,7 +51,7 @@ export const useBlogs = () => {
 const getuname = () => {
     useEffect(() => {
         axios
-            .get(`${BACKEND_URL}/api/v1/blog/uname`, {
+            .get(`${REACT_APP_BACKEND_URL}/api/v1/blog/uname`, {
                 headers: {
                     Authorization: localStorage.getItem("token"),
                 },

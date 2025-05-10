@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BACKEND_URL } from "../config";
+import { REACT_APP_BACKEND_URL } from "../config";
 import { HeaderS } from "./header";
 
 export const Auth = ({ type }) => {
@@ -11,9 +11,9 @@ export const Auth = ({ type }) => {
     const navigate = useNavigate();
     async function sendRequest() {
         try {
-            console.log(`${BACKEND_URL}/api/v1/user/${type}`);
+            console.log(`${REACT_APP_BACKEND_URL}/api/v1/user/${type}`);
             const response = await axios
-                .post(`${BACKEND_URL}/api/v1/user/${type}`, {
+                .post(`${REACT_APP_BACKEND_URL}/api/v1/user/${type}`, {
                     username: username,
                     password: password,
                 });

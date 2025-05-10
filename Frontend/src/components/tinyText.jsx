@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { BACKEND_URL } from "../config";
+import { REACT_APP_BACKEND_URL } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,7 @@ export function Editortiny() {
     const navigate = useNavigate();
     async function sendRequest() {
         try {
-            const lk = `${BACKEND_URL}/api/v1/blog/post`;
+            const lk = `${REACT_APP_BACKEND_URL}/api/v1/blog/post`;
             if (ctemp === "") {
                 console.log("input empty");
                 return;

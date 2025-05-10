@@ -1,5 +1,3 @@
-//index.js
-
 const UserRouter = require("./routes/user.js")
 const express = require("express")
 const mongo = require("mongoose");

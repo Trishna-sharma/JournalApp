@@ -10,6 +10,15 @@ export const Quote = () => {
                     <div className="text-m font-sm text-slate-400 flex text-left">
                         Portfolio Project
                     </div>
+                    <br />
+
+                    <div className="text-m font-sm text-slate-400 flex text-left">
+                        Use Following Account to use the site
+                        <br />
+                        User: DemoUser
+                        <br />
+                        Password: 12345678
+                    </div>
                 </div>
             </div>
         </div>

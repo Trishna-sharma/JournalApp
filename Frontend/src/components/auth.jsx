@@ -37,7 +37,7 @@ export const Auth = ({ type }) => {
 
                     <LabelledInput
                         label="Username"
-                        placeholder="Alucard"
+                        placeholder="provide user name here"
                         onChange={(e) => {
                             setUsername(e.target.value);
                         }}
@@ -45,7 +45,7 @@ export const Auth = ({ type }) => {
                     <LabelledInput
                         label="Password"
                         type={"password"}
-                        placeholder="Apassword"
+                        placeholder="provide password here"
                         onChange={(e) => {
                             setPassword(e.target.value);
                         }}
@@ -58,7 +58,7 @@ export const Auth = ({ type }) => {
              focus:ring-4 focus:ring-gray-300 font-medium 
              rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
                     >
-                        {type === "signup" ? "SignUp" : "Sign in"}
+                        {type === "signup" ? "Sign Up" : "Sign in"}
                     </button>
                 </div>
             </div>

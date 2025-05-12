@@ -2,7 +2,39 @@ import { Link } from "react-router-dom";
 
 export const Blogcard = ({ id, authorName, title, 
     content, publishedDate }) => {
+        const handleDelete = async (e) => {
+            e.preventDefault(); // Prevent navigation when clicking the delete button
+    
+            const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+            if (!confirmDelete) return;
+    
+            try {
+                const response = await fetch(`https://journal-app-backend-phi.vercel.app/api/v1/blog/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`, // Add your token here
+                    },
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    const errorMessage = errorData.message || "Failed to delete the post.";
+                    alert(errorMessage);
+                    return;
+                }
+    
+                alert("Post deleted successfully!");
+                if (onDelete) onDelete(id); // Notify parent component to update the UI
+            } catch (error) {
+                console.error("Error deleting post:", error);
+                alert("An error occurred while deleting the post.");
+            }
+        };
+    
     return (
+        <div>
+
+       
         <Link to={`/blog/${id}`}>
             <div className="border-b border-slate-200 p-4
              w-screen max-w-screen-md cursor-pointer">
@@ -32,6 +64,13 @@ export const Blogcard = ({ id, authorName, title,
                 </div>
             </div>
         </Link>
+        <button
+                onClick={handleDelete}
+                className="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            >
+                Delete
+            </button>
+        </div>
     );
 };
 

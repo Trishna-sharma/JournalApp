@@ -23,7 +23,7 @@ export const Blogs = () => {
             <div className="flex justify-center pt-10">
                 <div className="max-w-6xl w-full px-6">
                     <h1 className="text-4xl font-extrabold text-gray-800 text-center mb-8">
-                        Latest Blogs
+                        JOURNALS
                     </h1>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {blogs.map((blog) => (

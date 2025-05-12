@@ -4,13 +4,11 @@ import { Avatar } from "./blogCard"
 export const AppBar = () => {
     return <div className="py-1 border-b flex justify-between px-6 items-center">
         <Link to={'/blogs'}>
-            <div className="text-sm font-bold">
-                HOME
+            <div className="font-bold font-serif text-lg text-center">
+            Mou Portfolio Journal App
             </div>
         </Link>
-        <div className="font-bold font-serif text-lg text-center">
-            Mou Portfolio Journal App
-        </div>
+
         <div className="flex items-center space-x-4">
             <Link to={'/publish'}>
                 <button type="button" className="text-white
@@ -20,9 +18,9 @@ export const AppBar = () => {
                me-5" >PUBLISH</button>
             </Link>
 
-            <Avatar name={localStorage.getItem("Username")}>
+            <Avatar className="flex items-center space-x-4 uppercase" name={localStorage.getItem("Username")}/>
                 
-            </Avatar>
+            
         </div>
     </div>
 }

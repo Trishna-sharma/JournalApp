@@ -8,41 +8,41 @@ export const Blogs = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <div className="text-lg font-semibold text-gray-600">Loading...</div>
+            <div className="flex justify-center items-center min-h-screen bg-gray-50">
+                <div className="text-lg font-medium text-gray-600">Loading...</div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-50">
             {/* AppBar */}
             <AppBar />
 
             {/* Blog List */}
-            <div className="flex justify-center pt-10">
-                <div className="max-w-6xl w-full px-6">
-                    <h1 className="text-4xl font-extrabold text-gray-800 text-center mb-8">
-                        JOURNALS
+            <div className="flex justify-center pt-6">
+                <div className="max-w-5xl w-full px-4">
+                    <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
+                        Journals
                     </h1>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="space-y-4">
                         {blogs.map((blog) => (
                             <Link
                                 to={`/blog/${blog._id}`} // Navigate to the blog detail page
                                 key={blog._id}
-                                className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-300"
+                                className="block bg-white shadow-sm rounded-md p-4 hover:shadow-md transition-shadow duration-200 border border-gray-200"
                             >
-                                <h2 className="text-xl font-bold text-gray-800 break-words">
+                                <h2 className="text-lg font-semibold text-gray-800 truncate">
                                     {blog.title}
                                 </h2>
-                                <p className="text-sm text-gray-500 mt-2">
-                                    {blog.publishedDate}
+                                <p className="text-xs text-gray-500 mt-1">
+                                    {new Date(blog.publishedDate).toLocaleDateString()}
                                 </p>
-                                <div className="text-gray-700 mt-4 text-sm break-words">
-                                    {parse(blog.content.substring(0, 100))}...
+                                <div className="text-gray-700 mt-2 text-sm line-clamp-2">
+                                    {parse(blog.content.substring(0, 150))}...
                                 </div>
-                                <div className="mt-4">
-                                    <span className="text-blue-600 font-medium">
+                                <div className="mt-3 text-sm text-gray-500">
+                                    <span className="font-medium text-gray-600">
                                         {blog.author.Username || "Anonymous"}
                                     </span>
                                 </div>

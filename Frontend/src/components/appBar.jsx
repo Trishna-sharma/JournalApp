@@ -1,26 +1,36 @@
-import { Link } from "react-router-dom"
-import { Avatar } from "./blogCard"
+import { Link } from "react-router-dom";
+import { Avatar } from "./blogCard";
 
 export const AppBar = () => {
-    return <div className="py-1 border-b flex justify-between px-6 items-center">
-        <Link to={'/blogs'}>
-            <div className="font-bold font-serif text-lg text-center">
-            Mou Portfolio Journal App
+    return (
+        <div className="py-2 border-b bg-white flex justify-center items-center shadow-sm">
+            <div className="flex justify-between items-center w-full max-w-4xl px-4">
+                {/* App Title */}
+                <Link to={'/blogs'}>
+                    <div className="font-bold text-2xl text-gray-800 hover:text-black transition font-serif">
+                        Journal App By Trishna Sharma Mou
+                    </div>
+                </Link>
+
+                {/* Actions */}
+                <div className="flex items-center space-x-4">
+                    {/* Publish Button */}
+                    <Link to={'/publish'}>
+                        <button
+                            type="button"
+                            className="text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 font-medium rounded-md text-sm px-4 py-2 transition"
+                        >
+                            Publish
+                        </button>
+                    </Link>
+
+                    {/* User Avatar */}
+                    <Avatar
+                        className="uppercase"
+                        name={localStorage.getItem("Username") || "User"}
+                    />
+                </div>
             </div>
-        </Link>
-
-        <div className="flex items-center space-x-4">
-            <Link to={'/publish'}>
-                <button type="button" className="text-white
-             bg-green-700 hover:bg-green-800 focus:outline-none
-              focus:ring-4 focus:ring-green-300 font-medium 
-              rounded-full text-sm px-5 py-2.5 text-center
-               me-5" >PUBLISH</button>
-            </Link>
-
-            <Avatar className="flex items-center space-x-4 uppercase" name={localStorage.getItem("Username")}/>
-                
-            
         </div>
-    </div>
-}
+    );
+};

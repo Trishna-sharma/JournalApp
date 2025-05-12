@@ -1,23 +1,24 @@
 export const Quote = () => {
     return (
-        <div className="bg-slate-200 h-screen flex justify-center flex-col">
-            <div className="flex justify-center">
-                <div className="max-w-md ">
-                    <div className="text-3xl font-bold">Journal Web Application</div>
-                    <div className="text-xl font-semibold flex text-left mt-2">
-                        Trishna Sharma Mou
+        <div className="bg-white h-screen flex justify-center items-center">
+            <div className="max-w-lg p-6 shadow-lg rounded-lg border border-gray-200">
+                <div className="text-4xl font-extrabold text-gray-800 mb-4">
+                    Journal Web Application
+                </div>
+                <div className="text-lg font-medium text-gray-600 mb-2">
+                    Trishna Sharma Mou
+                </div>
+                <div className="text-sm text-gray-500 mb-6">
+                    Portfolio Project
+                </div>
+                <div className="bg-gray-100 p-4 rounded-lg">
+                    <div className="text-sm font-medium text-gray-700 mb-2">
+                        Demo Account:
                     </div>
-                    <div className="text-m font-sm text-slate-400 flex text-left">
-                        Portfolio Project
-                    </div>
-                    <br />
-
-                    <div className="text-m font-sm text-slate-400 flex text-left">
-                        Use Following Account to use the site
+                    <div className="text-sm text-gray-600">
+                        <strong>User:</strong> DemoUser
                         <br />
-                        User: DemoUser
-                        <br />
-                        Password: 12345678
+                        <strong>Password:</strong> 12345678
                     </div>
                 </div>
             </div>

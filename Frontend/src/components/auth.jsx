@@ -9,14 +9,14 @@ export const Auth = ({ type }) => {
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
+
     async function sendRequest() {
         try {
             console.log(`${REACT_APP_BACKEND_URL}/api/v1/user/${type}`);
-            const response = await axios
-                .post(`${REACT_APP_BACKEND_URL}/api/v1/user/${type}`, {
-                    username: username,
-                    password: password,
-                });
+            const response = await axios.post(`${REACT_APP_BACKEND_URL}/api/v1/user/${type}`, {
+                username: username,
+                password: password,
+            });
             console.log(response);
             const jwt = response.data.token;
             console.log(jwt);
@@ -25,40 +25,33 @@ export const Auth = ({ type }) => {
             navigate("/blogs");
         } catch (e) {
             alert(
-                "Error, Try again | use a diffrent username | make sure username is atleast 3 characterslong and password 8 characters "
+                "Error, Try again | use a different username | make sure username is at least 3 characters long and password 8 characters."
             );
         }
     }
-    return (
-        <div className="h-screen flex justify-center flex-col">
-            <div className="flex justify-center">
-                <div>
-                    <HeaderS type={type}></HeaderS>
 
+    return (
+        <div className="h-screen flex justify-center items-center bg-gray-50">
+            <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8 border border-gray-200">
+                <HeaderS type={type} />
+                <div className="mt-6">
                     <LabelledInput
                         label="Username"
-                        placeholder="provide user name here"
-                        onChange={(e) => {
-                            setUsername(e.target.value);
-                        }}
+                        placeholder="Enter your username"
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                     <LabelledInput
                         label="Password"
-                        type={"password"}
-                        placeholder="provide password here"
-                        onChange={(e) => {
-                            setPassword(e.target.value);
-                        }}
+                        type="password"
+                        placeholder="Enter your password"
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                     <button
                         onClick={sendRequest}
                         type="button"
-                        className="mt-8 w-full text-center text-white 
-            bg-gray-800 hover:bg-gray-900 focus:outline-none
-             focus:ring-4 focus:ring-gray-300 font-medium 
-             rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                        className="mt-6 w-full text-center text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5"
                     >
-                        {type === "signup" ? "Sign Up" : "Sign in"}
+                        {type === "signup" ? "Sign Up" : "Sign In"}
                     </button>
                 </div>
             </div>
@@ -66,20 +59,14 @@ export const Auth = ({ type }) => {
     );
 };
 
-function LabelledInput({ label, placeholder,
-    onChange, type = "text" }) {
+function LabelledInput({ label, placeholder, onChange, type = "text" }) {
     return (
-        <div className="mt-3 ">
-            <label className="block mb-2 text-sm 
-      font-medium text-gray-900">
-                {label}
-            </label>
+        <div className="mt-4">
+            <label className="block mb-2 text-sm font-medium text-gray-700">{label}</label>
             <input
                 onChange={onChange}
                 type={type}
-                className="bg-gray-50 border border-gray-300 
-        text-gray-900 text-sm rounded-lg focus:ring-blue-500 
-        focus:border-blue-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-black focus:border-black block w-full p-2.5"
                 placeholder={placeholder}
             />
         </div>

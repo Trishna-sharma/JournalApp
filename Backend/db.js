@@ -7,8 +7,13 @@ mongoose.connect(
         auth:{
             user:process.env.MONGO_USER,
             password:process.env.MONGO_PASSWORD
-        }
+        },
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        retryWrites: true,
+        w: 'majority'
     }
+
 );
 
 const userSchema = new mongoose.Schema({

@@ -7,11 +7,18 @@ const app = express();
 app.use(cors())
 const port = 8000;
 const corsOptions = {
-    origin: ["http://localhost:5173", "https://journal-app-frontend.vercel.app"], // Add your frontend URLs here
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-    credentials: true, // Allow cookies if needed
+    origin: [
+        "https://journal-app-lilac-seven.vercel.app",
+        "https://journal-app-frontend.vercel.app",
+        "http://localhost:5173"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 };
-app.use(express.json(),cors(corsOptions))
+app.options('*', cors(corsOptions)); // Handle preflight for all routes
+app.use(cors(corsOptions));
+app.use(express.json())
 
 app.listen(port, () => {
     console.log(`Server live at http://localhost:${port}`)

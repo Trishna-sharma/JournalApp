@@ -22,7 +22,7 @@ UserRouter.post('/signup', async (req, res) => {
             Username: req.body.username,
             password: req.body.password,
         });
-        const token = jwt.sign({ id: user._id }, JWT_SECRET);
+        const token = jwt.sign({ userId: user._id.toString() }, JWT_SECRET);
         return res.json({ token });
     } catch (e) {
         res.status(403).json({ e });
@@ -36,7 +36,7 @@ UserRouter.post('/signin', async (req, res) => {
     console.log("d" + user)
     if (user) {
         const token = jwt.sign({
-            userId: user._id
+            userId: user._id.toString()
         }, JWT_SECRET);
 
         res.json({

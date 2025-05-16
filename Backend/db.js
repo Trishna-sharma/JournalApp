@@ -4,10 +4,6 @@ mongoose.connect(
     process.env.MONGO_DB ,
     {
         tls: true,
-        auth:{
-            user:process.env.MONGO_USER,
-            password:process.env.MONGO_PASSWORD
-        },
         useNewUrlParser: true,
         useUnifiedTopology: true,
         retryWrites: true,

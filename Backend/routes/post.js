@@ -3,40 +3,11 @@ const jwt = require("jsonwebtoken");
 const express = require("express");
 const { Post, User } = require("../db");
 
+
 const PostRouter = express.Router();
 
-/*
-// In your backend routes (e.g., postRoutes.js)
-const express = require('express');
-const PostRouter = express.Router();
-const { authenticateUser } = require('../middleware/authMiddleware');
 
-// Apply authentication middleware to ALL journal routes
-PostRouter.use(authenticateUser);
 
-// Get all journals for the authenticated user
-PostRouter.get('/user/blogs', async (req, res) => {
-    try {
-        const posts = await Post.find({ author: req.userId }); // Filter by user ID
-        res.json(posts);
-    } catch (err) {
-        res.status(500).json({ message: "Failed to fetch journals" });
-    }
-});
-
-// Create a new journal (already ensures author = req.userId)
-PostRouter.post('/', async (req, res) => {
-    try {
-        const newPost = new Post({
-            ...req.body,
-            author: req.userId // Enforce ownership
-        });
-        await newPost.save();
-        res.status(201).json(newPost);
-    } catch (err) {
-        res.status(500).json({ message: "Failed to create journal" });
-    }
-});*/
 const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = req.headers.authorization?.split(' ')[1];
@@ -83,7 +54,6 @@ const authenticateUser = (req, res, next) => {
 };
 
 */
-
 
 // Apply middleware to all routes
 PostRouter.use(authMiddleware);

@@ -31,7 +31,7 @@ export const Auth = ({ type }) => {
     }
 
     return (
-        <div className="h-screen flex justify-center items-center bg-gray-50">
+        <div className="h-screen flex justify-center items-center">
             <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8 border border-gray-200">
                 <HeaderS type={type} />
                 <div className="mt-6">

@@ -1,55 +1,61 @@
 import { AppBar } from "../components/appBar";
+import { Blogcard } from "../components/blogCard";
 import { useBlogs } from "../hooks";
-import parse from "html-react-parser";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export const Blogs = () => {
-    const { loading, blogs } = useBlogs();
+    const { loading: initialLoading, blogs: fetchedBlogs, setBlogs } = useBlogs();
+    const [blogs, setLocalBlogs] = useState([]);
+    const [loading, setLoading] = useState(initialLoading);
+
+    useEffect(() => {
+        setLocalBlogs(fetchedBlogs);
+        setLoading(initialLoading);
+    }, [fetchedBlogs, initialLoading]);
+
+    const handlePostDeleted = (deletedPostId) => {
+        setLocalBlogs(currentBlogs => currentBlogs.filter(blog => blog._id !== deletedPostId));
+    };
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-50">
-                <div className="text-lg font-medium text-gray-600">Loading...</div>
+            <div className="h-screen flex flex-col justify-center items-center bg-gradient-to-br from-purple-600 via-pink-500 to-red-500">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"></div>
+                <p className="mt-4 text-white text-xl font-semibold">Loading Journals...</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* AppBar */}
+        <div className="min-h-screen bg-gradient-to-br from-rose-400 via-fuchsia-500 to-indigo-500">
             <AppBar />
-
-            {/* Blog List */}
-            <div className="flex justify-center pt-6">
-                <div className="max-w-5xl w-full px-4">
-                    <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
-                        Journals
-                    </h1>
-                    <div className="space-y-4">
+            <div className="container mx-auto px-4 py-8 md:py-12">
+                <h1 className="text-5xl font-extrabold text-white text-center mb-10 md:mb-16 shadow-sm">
+                    Discover Journals
+                </h1>
+                {blogs && blogs.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {blogs.map((blog) => (
-                            <Link
-                                to={`/blog/${blog._id}`} // Navigate to the blog detail page
+                            <Blogcard
                                 key={blog._id}
-                                className="block bg-white shadow-sm rounded-md p-4 hover:shadow-md transition-shadow duration-200 border border-gray-200"
-                            >
-                                <h2 className="text-lg font-semibold text-gray-800 truncate">
-                                    {blog.title}
-                                </h2>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    {new Date(blog.publishedDate).toLocaleDateString()}
-                                </p>
-                                <div className="text-gray-700 mt-2 text-sm line-clamp-2">
-                                    {parse(blog.content.substring(0, 150))}...
-                                </div>
-                                <div className="mt-3 text-sm text-gray-500">
-                                    <span className="font-medium text-gray-600">
-                                        {blog.author.Username || "Anonymous"}
-                                    </span>
-                                </div>
-                            </Link>
+                                id={blog._id}
+                                authorName={blog.author.Username || "Anonymous"}
+                                title={blog.title}
+                                content={blog.content}
+                                publishedDate={new Date(blog.publishedDate).toLocaleDateString()}
+                                onDeleteSuccess={handlePostDeleted}
+                            />
                         ))}
                     </div>
-                </div>
+                ) : (
+                    <div className="text-center py-10">
+                        <p className="text-2xl text-white/80 font-semibold">No journals found.</p>
+                        <Link to="/publish" className="mt-6 inline-block text-purple-600 bg-white hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-purple-300 font-semibold rounded-lg text-md px-6 py-3 transition duration-150 ease-in-out transform hover:scale-105">
+                            Create Your First Journal!
+                        </Link>
+                    </div>
+                )}
             </div>
         </div>
     );

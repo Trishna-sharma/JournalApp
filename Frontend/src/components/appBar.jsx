@@ -5,11 +5,13 @@ import { useState } from "react";
 export const AppBar = () => {
     const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    // Assuming username is stored in localStorage on signin/signup for display
+    const username = localStorage.getItem("Username") || "User";
 
     const handleSignout = () => {
-        localStorage.removeItem("token"); // Clear the token
-        localStorage.removeItem("Username"); // Clear the username if stored
-        navigate("/signin"); // Redirect to the signin page
+        localStorage.removeItem("token");
+        localStorage.removeItem("Username");
+        navigate("/signin");
     };
 
     const toggleDropdown = () => {
@@ -17,48 +19,49 @@ export const AppBar = () => {
     };
 
     return (
-        <div className="py-2 border-b bg-white flex justify-center items-center shadow-sm">
-            <div className="flex justify-between items-center w-full max-w-4xl px-4">
-                {/* App Title */}
+        <div className="py-3 px-4 md:px-10 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 shadow-lg sticky top-0 z-50">
+            <div className="flex justify-between items-center w-full max-w-screen-xl mx-auto">
                 <Link to={'/blogs'}>
-                    <div className="font-bold text-2xl text-gray-800 hover:text-black transition font-serif">
+                    <div className="font-bold text-3xl text-white hover:text-gray-200 transition duration-150 ease-in-out tracking-tight font-serif">
                         Journal App
                     </div>
                 </Link>
 
-                {/* Actions */}
-                <div className="flex items-center space-x-4 relative">
-                    {/* Publish Button */}
+                <div className="flex items-center space-x-4 md:space-x-6 relative">
                     <Link to={'/publish'}>
                         <button
                             type="button"
-                            className="text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 font-medium rounded-md text-sm px-4 py-2 transition"
+                            className="text-purple-600 bg-white hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-purple-300 font-semibold rounded-lg text-sm px-5 py-2.5 transition duration-150 ease-in-out transform hover:scale-105"
                         >
-                            Publish
+                            New Post
                         </button>
                     </Link>
 
-                    {/* Clickable Avatar for Dropdown */}
                     <div className="relative">
                         <button
                             onClick={toggleDropdown}
-                            className="focus:outline-none"
+                            className="focus:outline-none flex items-center space-x-2 p-1 rounded-full hover:bg-white/20 transition duration-150"
                             title="User Menu"
                         >
                             <Avatar
-                                className="uppercase cursor-pointer"
-                                name={localStorage.getItem("Username") || "User"}
+                                name={username} // Use the fetched username
+                                // Adding explicit size and text color for better control with new background
+                                size="md" // Assuming Avatar accepts a size prop, e.g., "sm", "md", "lg"
                             />
+                             <span className="text-white font-medium hidden md:block">{username}</span>
                         </button>
 
-                        {/* Dropdown Menu */}
                         {dropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-20 border border-gray-200/50 overflow-hidden">
                                 <ul className="py-1">
+                                    {/* Optional: Profile Link */}
+                                    {/* <li>
+                                        <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-500 hover:text-white">My Profile</Link>
+                                    </li> */}
                                     <li>
                                         <button
                                             onClick={handleSignout}
-                                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-500 hover:text-white font-medium transition duration-150 ease-in-out"
                                         >
                                             Sign Out
                                         </button>

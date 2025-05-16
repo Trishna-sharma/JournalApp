@@ -6,105 +6,100 @@ import { useNavigate } from "react-router-dom";
 
 export function Editortiny() {
     const editorRef = useRef(null);
-    const [title, stitle] = useState("");
-
-    let ctemp = "";
+    const [title, setTitle] = useState("");
     const navigate = useNavigate();
 
-    async function sendRequest() {
-        try {
-            const lk = `${REACT_APP_BACKEND_URL}/api/v1/blog/post`;
-            if (ctemp === "") {
-                console.log("input empty");
-                return;
-            }
+    async function sendRequest(content) {
+        if (!title.trim()) {
+            alert("Please enter a title.");
+            return;
+        }
+        if (!content || content.trim() === "<p></p>" || content.trim() === "") {
+            alert("Content cannot be empty.");
+            return;
+        }
 
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Authentication token not found. Please sign in.");
+            return;
+        }
+
+        try {
+            const backendUrl = REACT_APP_BACKEND_URL || "https://journal-app-backend-phi.vercel.app";
             const response = await axios.post(
-                lk,
+                `${backendUrl}/api/v1/blog/post`,
                 {
                     title: title,
-                    content: ctemp,
+                    content: content,
                 },
                 {
                     headers: {
-                        Authorization: localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                 }
             );
-
             navigate(`/blog/${response.data.id}`);
         } catch (e) {
             console.error("Error submitting data:", e);
+            alert("Failed to publish post. " + (e.response?.data?.message || e.message));
         }
     }
 
-    const savedata = async () => {
+    const handleSave = async () => {
         if (editorRef.current) {
-            ctemp = await editorRef.current.getContent();
-            sendRequest();
-        } else {
-            return null;
+            const content = await editorRef.current.getContent();
+            sendRequest(content);
         }
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-50 p-6">
-            <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-8">
-                <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
-                    Create a New Journal Entry
-                </h1>
+        <div className="w-full max-w-4xl mx-auto bg-white/90 backdrop-blur-sm shadow-2xl rounded-xl p-6 md:p-8 border border-gray-200/50">
+            <div className="mb-6">
+                <label htmlFor="journalTitle" className="block mb-2 text-lg font-semibold text-gray-700">Journal Title</label>
                 <input
-                    onChange={(e) => stitle(e.target.value)}
-                    className="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-lg rounded-md focus:ring-black focus:border-black block w-full p-3"
-                    placeholder="Enter a title..."
+                    id="journalTitle"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="bg-gray-100/80 border border-gray-300/70 text-gray-900 text-lg rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 block w-full p-3.5 placeholder-gray-400 transition-all duration-150 ease-in-out focus:shadow-md"
+                    placeholder="Enter a captivating title..."
                 />
-                <div className="border border-gray-300 rounded-md overflow-hidden mb-6">
-                    <Editor
-                        apiKey="4wkzc5j0925bq785jtnw5cqap16vwb7k95ze23j6afolazt7"
-                        onInit={(evt, editor) => (editorRef.current = editor)}
-                        initialValue="<p>Start writing your journal...</p>"
-                        init={{
-                            height: 500,
-                            menubar: false,
-                            plugins: [
-                                "advlist",
-                                "autolink",
-                                "lists",
-                                "link",
-                                "image",
-                                "charmap",
-                                "preview",
-                                "anchor",
-                                "searchreplace",
-                                "visualblocks",
-                                "code",
-                                "fullscreen",
-                                "insertdatetime",
-                                "media",
-                                "table",
-                                "code",
-                                "help",
-                                "wordcount",
-                            ],
-                            toolbar:
-                                "undo redo | blocks | " +
-                                "bold italic forecolor | alignleft aligncenter " +
-                                "alignright alignjustify | bullist numlist outdent indent | " +
-                                "removeformat | help",
-                            content_style:
-                                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                        }}
-                    />
-                </div>
-                <div className="flex justify-end">
-                    <button
-                        onClick={savedata}
-                        type="button"
-                        className="text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-6 py-3"
-                    >
-                        Submit
-                    </button>
-                </div>
+            </div>
+
+            <div className="mb-6 border border-gray-300/70 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-pink-500 focus-within:border-pink-500">
+                <Editor
+                    apiKey={import.meta.env.VITE_TINYMCE_API_KEY || "4wkzc5j0925bq785jtnw5cqap16vwb7k95ze23j6afolazt7"}
+                    onInit={(evt, editor) => (editorRef.current = editor)}
+                    initialValue="<p>Start crafting your journal entry here...</p>"
+                    init={{
+                        height: 550,
+                        menubar: true,
+                        plugins: [
+                            "advlist", "autolink", "lists", "link", "image", "charmap", "preview", "anchor",
+                            "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table",
+                            "help", "wordcount"
+                        ],
+                        toolbar:
+                            "undo redo | formatselect | bold italic underline forecolor backcolor | \
+                            alignleft aligncenter alignright alignjustify | \
+                            bullist numlist outdent indent | link image media | removeformat | preview | code | help",
+                        content_style:
+                            "body { font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height: 1.6; } \
+                             p { margin-bottom: 10px; }",
+                        skin: (window.matchMedia("(prefers-color-scheme: dark)").matches ? "oxide-dark" : "oxide"),
+                        content_css: (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default")
+                    }}
+                />
+            </div>
+
+            <div className="flex justify-end mt-8">
+                <button
+                    onClick={handleSave}
+                    type="button"
+                    className="text-white bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 focus:outline-none focus:ring-4 focus:ring-pink-300 font-semibold rounded-lg text-md px-8 py-3 transition-all duration-150 ease-in-out transform hover:scale-105"
+                >
+                    Publish Journal
+                </button>
             </div>
         </div>
     );

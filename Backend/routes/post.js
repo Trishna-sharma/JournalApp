@@ -13,54 +13,40 @@ const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).json({ message: 'Unauthorized' });
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(403).json({});
+        // It's better to be consistent with the unauthorized status
+        return res.status(401).json({ message: 'Bearer token missing or malformed' });
     }
-    // const token = authHeader.split(' ')[1];
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         req.userId = decoded.userId;
         console.log("Authenticated User ID:", req.userId); 
         next();
     } catch (err) {
-        return res.status(401).json({ message: 'Invalid token' });
-    }
-};
-const authenticateUser = (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ message: 'Unauthorized' });
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = decoded.userId; // Ensure this matches the JWT payload key
-        next();
-    } catch (err) {
-        return res.status(401).json({ message: 'Invalid token' });
-    }
-};
-/*
-const jwt = require('jsonwebtoken');
-
-const authenticateUser = (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ message: 'Unauthorized' });
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = decoded.userId; // Ensure this matches the JWT payload key
-        next();
-    } catch (err) {
+        // Log the error for more details on the server side during debugging
+        console.error("JWT Verification Error:", err.message);
         return res.status(401).json({ message: 'Invalid token' });
     }
 };
 
-*/
 
 // Apply middleware to all routes
 PostRouter.use(authMiddleware);
 
 PostRouter.get('/bulk', async (req, res) => {
-    const blogs = await Post.find({}).populate('author', 'Username');
-    return res.json({ blogs });
+    // Fetch only blogs where the author matches the authenticated user's ID
+    const userId = req.userId; // Get the user ID from the authMiddleware
+    if (!userId) {
+        // This case should ideally be caught by authMiddleware if a token is required for this route
+        // but as a safeguard:
+        return res.status(401).json({ message: "User not authenticated" });
+    }
+    try {
+        const blogs = await Post.find({ author: userId }).populate('author', 'Username');
+        return res.json({ blogs });
+    } catch (error) {
+        console.error("Error fetching user's blogs:", error);
+        return res.status(500).json({ message: "Failed to retrieve journal entries." });
+    }
 });
 
 PostRouter.post('/post', async (req, res) => {

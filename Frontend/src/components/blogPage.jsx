@@ -3,7 +3,20 @@ import { Avatar } from "./blogCard";
 import parse from "html-react-parser";
 import { useNavigate } from "react-router-dom";
 
+// Placeholder for backend URL, ensure this is configured via environment variables
+const BACKEND_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL || "https://journal-app-backend-phi.vercel.app";
+
 export const BlogPage = ({ blog }) => {
+    if (!blog || !blog.author) { // Graceful handling if blog or author is not fully loaded
+        // This could redirect or show a specific "not found" or error component
+        // For now, rendering a simple message or relying on parent component (Blog.jsx) error handling
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-700 via-gray-800 to-black flex justify-center items-center">
+                <p className="text-white text-2xl">Blog post data is incomplete or not found.</p>
+            </div>
+        );
+    }
+
     const RederedC = parse(blog.content);
     const navigate = useNavigate();
 
@@ -11,74 +24,91 @@ export const BlogPage = ({ blog }) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this post?");
         if (!confirmDelete) return;
 
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Authentication token not found. Please sign in.");
+            return;
+        }
+
         try {
-            const response = await fetch(`https://journal-app-backend-phi.vercel.app/api/v1/blog/${blog._id}`, {
+            // Corrected API endpoint for delete
+            const response = await fetch(`${BACKEND_URL}/api/v1/blog/${blog._id}`, {
                 method: "DELETE",
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`, // Add your token here
+                    'Authorization': `Bearer ${token}`,
                 },
             });
+
             if (!response.ok) {
-                const errorData = await response.json();
+                const errorData = await response.json().catch(() => ({ message: "Failed to parse error response from server."}));
                 alert(`Failed to delete the post: ${errorData.message}`);
                 return;
             }
-            if (response.ok) {
-                alert("Post deleted successfully!");
-                navigate("/blogs"); // Redirect to the blog list page
-            } else {
-                alert("Failed to delete the post.");
-            }
+
+            alert("Post deleted successfully!");
+            navigate("/blogs");
         } catch (error) {
             console.error("Error deleting post:", error);
             alert("An error occurred while deleting the post.");
         }
     };
 
+    // Format the published date
+    const formattedDate = blog.publishedDate 
+        ? new Date(blog.publishedDate).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })
+        : "Date not available";
+
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* AppBar */}
-            <AppBar name={blog.author.Username} />
+        // Use a gradient background for the entire page
+        <div className="min-h-screen bg-gradient-to-br from-gray-100 via-slate-200 to-stone-300">
+            <AppBar /> {/* AppBar already styled with its own background */}
 
-            {/* Blog Content */}
-            <div className="grid grid-cols-12 gap-8 px-6 md:px-10 w-full pt-12 max-w-screen-2xl mx-auto">
-                {/* Main Content */}
-                <div className="col-span-12 md:col-span-8 bg-white shadow-md rounded-lg p-6">
-                    <div className="text-4xl md:text-5xl font-extrabold text-gray-800">
-                        {blog.title}
-                    </div>
-                    <div className="text-slate-500 pt-2 text-sm md:text-base">
-                        Posted on 2nd Dec 2032
-                    </div>
-                    <div className="pt-6 text-gray-700 leading-relaxed text-base md:text-lg">
-                        {RederedC}
-                    </div>
-                    <button
-                        onClick={handleDelete}
-                        className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                    >
-                        Delete Post
-                    </button>
-                </div>
+            <div className="container mx-auto px-4 py-8 md:py-12">
+                <div className="grid grid-cols-12 gap-x-8 gap-y-10">
+                    {/* Main Content Area */}
+                    <article className="col-span-12 lg:col-span-8 bg-white/90 backdrop-blur-md shadow-2xl rounded-xl p-6 md:p-8 border border-gray-200/50">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 mb-4 leading-tight">
+                            {blog.title}
+                        </h1>
+                        <p className="text-sm text-gray-500 mb-6">
+                            Published on {formattedDate}
+                        </p>
+                        {/* Prose classes for better typography for HTML content */}
+                        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                            {RederedC}
+                        </div>
+                        {/* Delete Button - Only show if user is author (assuming author check happens on backend) */}
+                        <div className="mt-8 pt-6 border-t border-gray-200/80 flex justify-end">
+                            <button
+                                onClick={handleDelete}
+                                className="text-white bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 focus:outline-none focus:ring-4 focus:ring-pink-300 font-semibold rounded-lg text-sm px-6 py-2.5 transition-all duration-150 ease-in-out transform hover:scale-105"
+                            >
+                                Delete Post
+                            </button>
+                        </div>
+                    </article>
 
-                {/* Sidebar */}
-                <div className="col-span-12 md:col-span-4 bg-white shadow-md rounded-lg p-6">
-                    <div className="text-slate-600 text-lg font-semibold mb-4">
-                        Author
-                    </div>
-                    <div className="flex items-center">
-                        <div className="pr-4">
-                            <Avatar name={blog.author.Username || "Anon"} />
-                        </div>
-                        <div>
-                            <div className="text-xl font-bold text-gray-800">
-                                {blog.author.Username || "Anonymous"}
+                    {/* Sidebar for Author Info */}
+                    <aside className="col-span-12 lg:col-span-4">
+                        <div className="sticky top-28">
+                            <div className="bg-white/90 backdrop-blur-md shadow-2xl rounded-xl p-6 border border-gray-200/50">
+                                <h3 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 mb-5">
+                                    About the Author
+                                </h3>
+                                <div className="flex items-center mb-4">
+                                    <Avatar name={blog.author.Username || "A"} size="lg" /> {/* Use larger avatar */}
+                                    <div className="ml-4">
+                                        <p className="text-lg font-bold text-gray-800">
+                                            {blog.author.Username || "Anonymous"}
+                                        </p>
+                                        {/* You can add more author details here if available, e.g., a short bio */}
+                                        {/* <p className="text-xs text-gray-500">Bio: Not available</p> */}
+                                    </div>
+                                </div>
+                                {/* Add more author details or related posts here if desired */}
                             </div>
-                            <div className="text-sm text-gray-500">
-                                {blog.author.bio || "No bio available"}
-                            </div>
                         </div>
-                    </div>
+                    </aside>
                 </div>
             </div>
         </div>

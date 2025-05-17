@@ -23,7 +23,7 @@ export const AppBar = () => {
             <div className="flex justify-between items-center w-full max-w-screen-xl mx-auto">
                 <Link to={'/blogs'}>
                     <div className="font-bold text-3xl text-white hover:text-gray-200 transition duration-150 ease-in-out tracking-tight font-serif">
-                        Journal App
+                        Pen Cil
                     </div>
                 </Link>
 

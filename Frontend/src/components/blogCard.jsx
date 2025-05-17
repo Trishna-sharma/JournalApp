@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 const BACKEND_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL || "https://journal-app-backend-phi.vercel.app";
 
@@ -6,16 +7,44 @@ export const Blogcard = ({ id, authorName, title, content, publishedDate, onDele
 
     const handleDelete = async (e) => {
         e.preventDefault();
-        e.stopPropagation(); 
+        e.stopPropagation();
 
-        const confirmDelete = window.confirm("Are you sure you want to delete this post?");
-        if (!confirmDelete) return;
+        // We'll use a toast to ask for confirmation, then the actual delete
+        // For a simple replacement, we can show a loading toast immediately
+        // and then success/error. A two-step confirmation toast is more complex.
 
+        // To emulate confirm, we can do this:
+        toast((t) => (
+            <span className="p-2">
+                Are you sure you want to delete this post?
+                <button 
+                    className="ml-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                    onClick={() => { 
+                        toast.dismiss(t.id);
+                        proceedWithDelete(); 
+                    }}
+                >
+                    Yes, Delete
+                </button>
+                <button 
+                    className="ml-2 px-3 py-1 bg-gray-300 text-black rounded hover:bg-gray-400 text-sm"
+                    onClick={() => toast.dismiss(t.id)}
+                >
+                    Cancel
+                </button>
+            </span>
+        ), { duration: 6000 }); // Give user time to respond
+
+    };
+
+    const proceedWithDelete = async () => {
         const token = localStorage.getItem("token");
         if (!token) {
-            alert("Authentication token not found. Please sign in.");
+            toast.error("Authentication token not found. Please sign in.");
             return;
         }
+
+        const loadingToastId = toast.loading('Deleting post...');
 
         try {
             const response = await fetch(`${BACKEND_URL}/api/v1/blog/${id}`, {
@@ -28,15 +57,16 @@ export const Blogcard = ({ id, authorName, title, content, publishedDate, onDele
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ message: "Failed to parse error response." }));
                 const errorMessage = errorData.message || "Failed to delete the post.";
-                alert(errorMessage);
+                toast.error(errorMessage, { id: loadingToastId });
                 return;
             }
 
-            alert("Post deleted successfully!");
+            toast.success("Post deleted successfully!", { id: loadingToastId });
             if (onDeleteSuccess) onDeleteSuccess(id);
         } catch (error) {
+            toast.dismiss(loadingToastId); // Ensure loading toast is dismissed on generic catch
             console.error("Error deleting post:", error);
-            alert("An error occurred while deleting the post.");
+            toast.error("An error occurred while deleting the post.");
         }
     };
 

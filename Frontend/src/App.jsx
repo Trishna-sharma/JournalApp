@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Toaster } from 'react-hot-toast';
 import { Signin } from "./pages/signin";
 import { Blog } from "./pages/blog";
 import { Blogs } from "./pages/blogs";
@@ -8,6 +9,7 @@ import { Publish } from "./pages/publish";
 function App() {
   return (
     <>
+      <Toaster />
       <BrowserRouter>
         <Routes>
           <Route path="/signup" element={<Signup />} />

@@ -3,27 +3,38 @@ import { Editor } from "@tinymce/tinymce-react";
 import { REACT_APP_BACKEND_URL } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 export function Editortiny() {
     const editorRef = useRef(null);
     const [title, setTitle] = useState("");
     const navigate = useNavigate();
 
+    const handleTitleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            // Prevent default form submission if this input were part of a <form>
+            event.preventDefault(); 
+            handleSave();
+        }
+    };
+
     async function sendRequest(content) {
         if (!title.trim()) {
-            alert("Please enter a title.");
+            toast.error("Please enter a title.");
             return;
         }
         if (!content || content.trim() === "<p></p>" || content.trim() === "") {
-            alert("Content cannot be empty.");
+            toast.error("Content cannot be empty.");
             return;
         }
 
         const token = localStorage.getItem("token");
         if (!token) {
-            alert("Authentication token not found. Please sign in.");
+            toast.error("Authentication token not found. Please sign in.");
             return;
         }
+
+        const loadingToastId = toast.loading('Publishing your journal...');
 
         try {
             const backendUrl = REACT_APP_BACKEND_URL || "https://journal-app-backend-phi.vercel.app";
@@ -39,10 +50,12 @@ export function Editortiny() {
                     },
                 }
             );
+            toast.success('Journal published successfully!', { id: loadingToastId });
             navigate(`/blog/${response.data.id}`);
         } catch (e) {
+            toast.dismiss(loadingToastId);
             console.error("Error submitting data:", e);
-            alert("Failed to publish post. " + (e.response?.data?.message || e.message));
+            toast.error("Failed to publish post. " + (e.response?.data?.message || e.message));
         }
     }
 
@@ -61,6 +74,7 @@ export function Editortiny() {
                     id="journalTitle"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    onKeyDown={handleTitleKeyDown}
                     className="bg-gray-100/80 border border-gray-300/70 text-gray-900 text-lg rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 block w-full p-3.5 placeholder-gray-400 transition-all duration-150 ease-in-out focus:shadow-md"
                     placeholder="Enter a captivating title..."
                 />

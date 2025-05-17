@@ -2,6 +2,7 @@ import { AppBar } from "./appBar";
 import { Avatar } from "./blogCard";
 import parse from "html-react-parser";
 import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 // Placeholder for backend URL, ensure this is configured via environment variables
 const BACKEND_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL || "https://journal-app-backend-phi.vercel.app";
@@ -21,17 +22,39 @@ export const BlogPage = ({ blog }) => {
     const navigate = useNavigate();
 
     const handleDelete = async () => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this post?");
-        if (!confirmDelete) return;
+        // Use toast for confirmation
+        toast((t) => (
+            <span className="p-2">
+                Are you sure you want to delete this post?
+                <button 
+                    className="ml-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                    onClick={() => { 
+                        toast.dismiss(t.id);
+                        proceedWithPageDelete(); 
+                    }}
+                >
+                    Yes, Delete
+                </button>
+                <button 
+                    className="ml-2 px-3 py-1 bg-gray-300 text-black rounded hover:bg-gray-400 text-sm"
+                    onClick={() => toast.dismiss(t.id)}
+                >
+                    Cancel
+                </button>
+            </span>
+        ), { duration: 6000 });
+    };
 
+    const proceedWithPageDelete = async () => {
         const token = localStorage.getItem("token");
         if (!token) {
-            alert("Authentication token not found. Please sign in.");
+            toast.error("Authentication token not found. Please sign in.");
             return;
         }
 
+        const loadingToastId = toast.loading('Deleting post...');
+
         try {
-            // Corrected API endpoint for delete
             const response = await fetch(`${BACKEND_URL}/api/v1/blog/${blog._id}`, {
                 method: "DELETE",
                 headers: {
@@ -41,15 +64,16 @@ export const BlogPage = ({ blog }) => {
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ message: "Failed to parse error response from server."}));
-                alert(`Failed to delete the post: ${errorData.message}`);
+                toast.error(`Failed to delete the post: ${errorData.message}`, { id: loadingToastId });
                 return;
             }
 
-            alert("Post deleted successfully!");
+            toast.success("Post deleted successfully! Redirecting...", { id: loadingToastId });
             navigate("/blogs");
         } catch (error) {
+            toast.dismiss(loadingToastId); // Ensure loading toast is dismissed on generic catch
             console.error("Error deleting post:", error);
-            alert("An error occurred while deleting the post.");
+            toast.error("An error occurred while deleting the post.");
         }
     };
 

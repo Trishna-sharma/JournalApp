@@ -10,7 +10,7 @@ export const useBlog = ({ id }) => {
         axios
             .get(`${REACT_APP_BACKEND_URL}/api/v1/blog/${id}`, {
                 headers: {
-                    Authorization: localStorage.getItem("token"),
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             })
             .then((response) => {
@@ -33,7 +33,7 @@ export const useBlogs = () => {
         axios
             .get(`${REACT_APP_BACKEND_URL}/api/v1/blog/bulk`, {
                 headers: {
-                    Authorization: localStorage.getItem("token"),
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             })
             .then((response) => {
@@ -53,7 +53,7 @@ const getuname = () => {
         axios
             .get(`${REACT_APP_BACKEND_URL}/api/v1/blog/uname`, {
                 headers: {
-                    Authorization: localStorage.getItem("token"),
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             })
             .then((response) => {

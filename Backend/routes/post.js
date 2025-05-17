@@ -13,7 +13,6 @@ const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).json({ message: 'Unauthorized' });
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        // It's better to be consistent with the unauthorized status
         return res.status(401).json({ message: 'Bearer token missing or malformed' });
     }
     try {
@@ -22,7 +21,6 @@ const authMiddleware = (req, res, next) => {
         console.log("Authenticated User ID:", req.userId); 
         next();
     } catch (err) {
-        // Log the error for more details on the server side during debugging
         console.error("JWT Verification Error:", err.message);
         return res.status(401).json({ message: 'Invalid token' });
     }

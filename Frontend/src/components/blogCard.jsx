@@ -1,15 +1,12 @@
 import { Link } from "react-router-dom";
 
-// Assuming REACT_APP_BACKEND_URL is correctly set up in your project's environment or a config file
-// For this example, I'll use a placeholder. Replace with your actual backend URL configuration.
 const BACKEND_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL || "https://journal-app-backend-phi.vercel.app";
 
 export const Blogcard = ({ id, authorName, title, content, publishedDate, onDeleteSuccess }) => {
-    // onDeleteSuccess is a new prop to notify parent to refresh list
 
     const handleDelete = async (e) => {
         e.preventDefault();
-        e.stopPropagation(); // Prevent link navigation when clicking delete button
+        e.stopPropagation(); 
 
         const confirmDelete = window.confirm("Are you sure you want to delete this post?");
         if (!confirmDelete) return;
@@ -36,14 +33,14 @@ export const Blogcard = ({ id, authorName, title, content, publishedDate, onDele
             }
 
             alert("Post deleted successfully!");
-            if (onDeleteSuccess) onDeleteSuccess(id); // Call the callback
+            if (onDeleteSuccess) onDeleteSuccess(id);
         } catch (error) {
             console.error("Error deleting post:", error);
             alert("An error occurred while deleting the post.");
         }
     };
 
-    // Helper to convert HTML content to plain text and truncate
+
     function getSnippet(htmlContent, length = 150) {
         const plainText = htmlContent.replace(/<\/?[^>]+(>|$)/g, "");
         if (plainText.length <= length) return plainText;
@@ -87,12 +84,12 @@ export const Blogcard = ({ id, authorName, title, content, publishedDate, onDele
     );
 };
 
-export function Circle() { // This component seems unused in the styled BlogCard, can be removed if not needed elsewhere
+export function Circle() { 
     return <div className="bg-slate-400 w-1 h-1 rounded-full"></div>;
 }
 
-// Enhanced Avatar Component
-export function Avatar({ name, size = "sm" }) { // Default size to 'sm'
+
+export function Avatar({ name, size = "sm" }) { 
     const sizeClasses = {
         sm: "w-8 h-8 text-xs",
         md: "w-10 h-10 text-sm",
@@ -108,4 +105,3 @@ export function Avatar({ name, size = "sm" }) { // Default size to 'sm'
     );
 }
 
-// convHtml is replaced by getSnippet for local use

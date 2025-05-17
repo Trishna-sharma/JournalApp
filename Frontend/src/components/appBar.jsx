@@ -44,9 +44,9 @@ export const AppBar = () => {
                             title="User Menu"
                         >
                             <Avatar
-                                name={username} // Use the fetched username
-                                // Adding explicit size and text color for better control with new background
-                                size="md" // Assuming Avatar accepts a size prop, e.g., "sm", "md", "lg"
+                                name={username} 
+                                
+                                size="md"
                             />
                              <span className="text-white font-medium hidden md:block">{username}</span>
                         </button>
@@ -54,10 +54,6 @@ export const AppBar = () => {
                         {dropdownOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-20 border border-gray-200/50 overflow-hidden">
                                 <ul className="py-1">
-                                    {/* Optional: Profile Link */}
-                                    {/* <li>
-                                        <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-500 hover:text-white">My Profile</Link>
-                                    </li> */}
                                     <li>
                                         <button
                                             onClick={handleSignout}

@@ -20,7 +20,7 @@ export const Auth = ({ type }) => {
             console.log(response);
             const jwt = response.data.token;
             console.log(jwt);
-            localStorage.setItem("token", "Bearer " + jwt);
+            localStorage.setItem("token", jwt);
 
             navigate("/blogs");
         } catch (e) {

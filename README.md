@@ -1,4 +1,4 @@
-# 📓 JournalApp - Portfolio app by Trishna Shil Mou
+# 📓 JournalApp - Portfolio app by Trishna Sharma Mou
 
 **🚀 Live Demo:** [https://journal-app-lilac-seven.vercel.app/](https://journal-app-lilac-seven.vercel.app/)
 
